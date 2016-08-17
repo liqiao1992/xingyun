@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#FFFFFF"
+    android:padding="8dp">
+
+    <RelativeLayout
+        android:background="?selectorListItem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.lq.xingyun.widget.RatioImageView
+            android:id="@+id/item_picturefragment_imageview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            android:src="@mipmap/ic_loading" />
+
+        <TextView
+            android:textColor="?titleColor"
+            android:id="@+id/item_picturefragment_dec_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/item_picturefragment_imageview"
+            android:text="蛇蝎女佣第三季"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+    </RelativeLayout>
+</android.support.v7.widget.CardView>
