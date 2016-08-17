@@ -129,7 +129,7 @@ public class MoviePlayActivity extends BaseActivity {
     private PLMediaPlayer.OnCompletionListener mOnCompletionListener = new PLMediaPlayer.OnCompletionListener() {
         @Override
         public void onCompletion(PLMediaPlayer plMediaPlayer) {
-            showToastTips("Play Completed !");
+            showToastTips("Play Completed!");
             finish();
         }
     };
