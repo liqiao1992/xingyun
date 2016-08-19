@@ -1,11 +1,13 @@
 package com.lq.xingyun.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -73,21 +75,30 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         mViewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(mViewPager);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int index = tabLayout.getSelectedTabPosition();
-                switch (index) {
-                    case 0:
-                        break;
-                    case 1:
-                        break;
-                    case 2:
-                        break;
+        if (fab != null) {
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int index = tabLayout.getSelectedTabPosition();
+                    Intent intent=new Intent();
+                    switch (index) {
+                        case 0:
+                            intent.setAction(MovieFragment.TAG);
+                            LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+                            break;
+                        case 1:
+                            intent.setAction(ArticleFragment.TAG);
+                            LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+                            break;
+                        case 2:
+                            intent.setAction(PictureFragment.TAG);
+                            LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+                            break;
 
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     @Override
