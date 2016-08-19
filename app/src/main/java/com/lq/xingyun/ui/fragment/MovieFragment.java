@@ -1,7 +1,11 @@
 package com.lq.xingyun.ui.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.util.Log;
 
@@ -21,9 +25,11 @@ import java.util.List;
  * Created by lenovo on 2016/8/3.
  */
 public class MovieFragment extends BaseFragment implements IMovieFragmentView {
+    public static String TAG="MovieFragment";
     private EasyRecyclerView easyRecyclerView;
     private MovieFragmentAdapter movieFragmentAdapter;
 
+    private    LocalBroadcastReceiver localBroadcastReceiver;
     @Override
     public BasePresenter getPresenter() {
         return new MovieFragmentPresenter();
@@ -78,5 +84,33 @@ public class MovieFragment extends BaseFragment implements IMovieFragmentView {
     @Override
     public void refreshMovieDataError() {
         easyRecyclerView.showError();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        localBroadcastReceiver=new LocalBroadcastReceiver();
+        IntentFilter intentFilter=new IntentFilter();
+        intentFilter.addAction(TAG);
+        LocalBroadcastManager.getInstance(mContext).registerReceiver(localBroadcastReceiver,intentFilter);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(mContext).unregisterReceiver(localBroadcastReceiver);
+    }
+
+    public class LocalBroadcastReceiver extends BroadcastReceiver{
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.i("fuck","接收到广播了");
+            if(intent.getAction().equals(TAG)) {
+                if (easyRecyclerView != null) {
+                    easyRecyclerView.scrollToPosition(0);
+                }
+            }
+        }
     }
 }

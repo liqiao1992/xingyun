@@ -1,7 +1,11 @@
 package com.lq.xingyun.ui.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 
 import com.jude.easyrecyclerview.EasyRecyclerView;
@@ -17,6 +21,7 @@ import com.lq.xingyun.ui.view.IArticleFragmentView;
 import com.lq.xingyun.utils.DipUtils;
 
 import android.graphics.Color;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.util.List;
@@ -25,10 +30,10 @@ import java.util.List;
  * Created by lenovo on 2016/8/4.
  */
 public class ArticleFragment extends BaseFragment implements IArticleFragmentView {
-
+    public static String TAG="ArticleFragment";
     private EasyRecyclerView easyRecyclerView;
     private ArticleFragmentAdapter articleFragmentAdapter;
-
+    private    LocalBroadcastReceiver localBroadcastReceiver;
     @Override
     public BasePresenter getPresenter() {
         return new ArticleFragmentPresenter();
@@ -88,5 +93,32 @@ public class ArticleFragment extends BaseFragment implements IArticleFragmentVie
     @Override
     public void refreshArticleDataError() {
         easyRecyclerView.showError();
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        localBroadcastReceiver=new LocalBroadcastReceiver();
+        IntentFilter intentFilter=new IntentFilter();
+        intentFilter.addAction(TAG);
+        LocalBroadcastManager.getInstance(mContext).registerReceiver(localBroadcastReceiver,intentFilter);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(mContext).unregisterReceiver(localBroadcastReceiver);
+    }
+
+    public class LocalBroadcastReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.i("fuck","接收到广播了");
+            if(intent.getAction().equals(TAG)) {
+                if (easyRecyclerView != null) {
+                    easyRecyclerView.scrollToPosition(0);
+                }
+            }
+        }
     }
 }

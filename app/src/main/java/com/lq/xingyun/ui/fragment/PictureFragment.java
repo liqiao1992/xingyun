@@ -1,7 +1,11 @@
 package com.lq.xingyun.ui.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
@@ -25,9 +29,10 @@ import java.util.List;
  */
 public class PictureFragment extends BaseFragment implements IPictureFragmentView {
 
-
+    public static String TAG = "PictureFragment";
     private EasyRecyclerView easyRecyclerView;
     private PictureFragmentAdapter pictureFragmentAdapter;
+    private LocalBroadcastReceiver localBroadcastReceiver;
 
     @Override
     public BasePresenter getPresenter() {
@@ -73,8 +78,8 @@ public class PictureFragment extends BaseFragment implements IPictureFragmentVie
                 boolean isBottom =
                         staggeredGridLayoutManager.findLastCompletelyVisibleItemPositions(new int[2])[1] >=
                                 pictureFragmentAdapter.getCount() - 2;
-                Log.i("fuck","最后视图坐标"+staggeredGridLayoutManager.findLastCompletelyVisibleItemPositions(new int[2])[1]);
-                Log.i("fuck","总ITEM数"+pictureFragmentAdapter.getCount());
+                Log.i("fuck", "最后视图坐标" + staggeredGridLayoutManager.findLastCompletelyVisibleItemPositions(new int[2])[1]);
+                Log.i("fuck", "总ITEM数" + pictureFragmentAdapter.getCount());
                 if (isBottom) {
                     ((PictureFragmentPresenter) mBasePresenter).loadPicturesData(false);
                 }
@@ -112,5 +117,31 @@ public class PictureFragment extends BaseFragment implements IPictureFragmentVie
         easyRecyclerView.showError();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        localBroadcastReceiver = new LocalBroadcastReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(TAG);
+        LocalBroadcastManager.getInstance(mContext).registerReceiver(localBroadcastReceiver, intentFilter);
+    }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(mContext).unregisterReceiver(localBroadcastReceiver);
+    }
+
+    public class LocalBroadcastReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.i("fuck", "接收到广播了");
+            if (intent.getAction().equals(TAG)) {
+                if (easyRecyclerView != null) {
+                    easyRecyclerView.scrollToPosition(0);
+                }
+            }
+        }
+    }
 }
