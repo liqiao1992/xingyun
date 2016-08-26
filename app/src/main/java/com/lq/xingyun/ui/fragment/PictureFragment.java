@@ -36,11 +36,18 @@ public class PictureFragment extends BaseFragment implements IPictureFragmentVie
 
     @Override
     public BasePresenter getPresenter() {
-        return new PictureFragmentPresenter();
+        if (mBasePresenter != null) {
+            return mBasePresenter;
+        } else {
+            return new PictureFragmentPresenter();
+        }
     }
 
     @Override
     public void bindView(Bundle savedInstanceState) {
+        if(!firstInitUi){
+            return;
+        }
         easyRecyclerView = (EasyRecyclerView) getView().findViewById(R.id.fragment_picture_recycler_view);
         pictureFragmentAdapter = new PictureFragmentAdapter(getContext());
         pictureFragmentAdapter.setOnItemClickListener(new RecyclerArrayAdapter.OnItemClickListener() {

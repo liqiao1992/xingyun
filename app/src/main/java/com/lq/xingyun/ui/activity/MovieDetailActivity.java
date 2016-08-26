@@ -6,14 +6,12 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.GridLayoutManager;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -44,6 +42,7 @@ public class MovieDetailActivity extends BaseActivity implements IMovieActivityV
     private String movieTitle;
     private Snackbar snackbar;
     private boolean isLoadingPath=false;
+    private String episodesId;
 
     @Override
     public int getToolBarId() {
@@ -89,7 +88,7 @@ public class MovieDetailActivity extends BaseActivity implements IMovieActivityV
         movieActivityAdapter.addHeader(new RecyclerArrayAdapter.ItemView() {
             @Override
             public View onCreateView(ViewGroup parent) {
-                return initheadview();
+                return initHeadView();
             }
 
             @Override
@@ -105,6 +104,7 @@ public class MovieDetailActivity extends BaseActivity implements IMovieActivityV
                     snackbar = Snackbar.make(easyRecyclerView, "获取播放链接...", Snackbar.LENGTH_INDEFINITE);
                     SnackbarAddView(snackbar,0);
                     snackbar.show();
+                    episodesId=movieActivityAdapter.getItem(position).getEpisode();
                     ((MovieActivityPresenter) mPresenter).getPlayVideoPath("high", movieId, movieActivityAdapter.getItem(position).getSid());
                 }
             }
@@ -122,7 +122,7 @@ public class MovieDetailActivity extends BaseActivity implements IMovieActivityV
     private TextView tv_score;
     private TextView tv_content;
 
-    private View initheadview() {
+    private View initHeadView() {
         View view = getLayoutInflater().inflate(R.layout.item_movielist_header, null);
         tv_playcount = (TextView) view.findViewById(R.id.tv_playcount);
         tv_score = (TextView) view.findViewById(R.id.tv_score);
@@ -143,7 +143,7 @@ public class MovieDetailActivity extends BaseActivity implements IMovieActivityV
         List<MovieDetailBean.DataBean.SeasonBean.EpisodeBriefBean> playUrlList = data.getEpisode_brief();
         Collections.sort(playUrlList, comparable);
         //header
-        updateheaer(data.getViewCount() + "", data.getScore() + "", data.getBrief());
+        updateHeader(data.getViewCount() + "", data.getScore() + "", data.getBrief());
         movieActivityAdapter.addAll(playUrlList);
         movieTitle=data.getTitle();
         collapsingToolbarLayout.setTitle(data.getTitle());
@@ -162,8 +162,8 @@ public class MovieDetailActivity extends BaseActivity implements IMovieActivityV
             snackbar.dismiss();
         }
         Intent intent = new Intent(MovieDetailActivity.this, MoviePlayActivity.class);
-        intent.putExtra("VIEEO_PATH", data.getUrl());
-        intent.putExtra("VIDEO_TITLE",movieTitle);
+        intent.putExtra("VIDEO_PATH", data.getUrl());
+        intent.putExtra("VIDEO_TITLE",movieTitle+"第"+episodesId+"集");
         startActivity(intent);
     }
 
@@ -177,7 +177,7 @@ public class MovieDetailActivity extends BaseActivity implements IMovieActivityV
         Snackbar.make(easyRecyclerView,"获取播放链接失败...",Snackbar.LENGTH_LONG).show();
     }
 
-    private void updateheaer(String playcount, String score, String content) {
+    private void updateHeader(String playcount, String score, String content) {
         if (content.length() == 0) {
             content = "暂时没有简介哦~~";
         }

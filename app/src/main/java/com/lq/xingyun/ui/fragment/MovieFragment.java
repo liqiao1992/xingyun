@@ -32,11 +32,18 @@ public class MovieFragment extends BaseFragment implements IMovieFragmentView {
     private    LocalBroadcastReceiver localBroadcastReceiver;
     @Override
     public BasePresenter getPresenter() {
-        return new MovieFragmentPresenter();
+        if(mBasePresenter!=null){
+            return mBasePresenter;
+        }else {
+            return new MovieFragmentPresenter();
+        }
     }
 
     @Override
     public void bindView(Bundle savedInstanceState) {
+        if(!firstInitUi){
+            return;
+        }
         easyRecyclerView = (EasyRecyclerView) getView().findViewById(R.id.fragment_movie_recycler_view);
         movieFragmentAdapter = new MovieFragmentAdapter(getContext());
 

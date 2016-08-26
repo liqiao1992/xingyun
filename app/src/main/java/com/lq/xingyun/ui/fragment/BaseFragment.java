@@ -21,12 +21,13 @@ public abstract class BaseFragment extends Fragment implements IBase {
     private View mRootView;
     protected BasePresenter mBasePresenter;
     protected Context mContext;
+    protected boolean firstInitUi = true;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        Log.i("BaseFragment","fragment------create");
-        mBasePresenter=getPresenter();
-        if(mBasePresenter!=null&&this instanceof IBaseView){
+        Log.i("BaseFragment", "fragment------create");
+        mBasePresenter = getPresenter();
+        if (mBasePresenter != null && this instanceof IBaseView) {
             mBasePresenter.attach((IBaseView) this);
         }
         super.onCreate(savedInstanceState);
@@ -35,14 +36,18 @@ public abstract class BaseFragment extends Fragment implements IBase {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.i("BaseFragment","fragment------onCreateView");
+        Log.i("BaseFragment", "fragment------onCreateView");
         if (mRootView != null) {
+            Log.i("BaseFragment", "fragment------onCreateView------------second");
             ViewGroup parent = (ViewGroup) mRootView.getParent();
             if (parent != null) {
                 parent.removeView(mRootView);
             }
+            firstInitUi = false;
         } else {
+            Log.i("BaseFragment", "fragment------onCreateView-----------first");
             mRootView = createView(inflater, container, savedInstanceState);
+            firstInitUi = true;
         }
         mContext = mRootView.getContext();
         return mRootView;
@@ -50,7 +55,7 @@ public abstract class BaseFragment extends Fragment implements IBase {
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        Log.i("BaseFragment","fragment------onActivityCreated");
+        Log.i("BaseFragment", "fragment------onActivityCreated");
         super.onActivityCreated(savedInstanceState);
         bindView(savedInstanceState);
     }
@@ -58,29 +63,36 @@ public abstract class BaseFragment extends Fragment implements IBase {
     @Override
     public void onStart() {
         super.onStart();
-        Log.i("BaseFragment","fragment------onStart");
+        Log.i("BaseFragment", "fragment------onStart");
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Log.i("BaseFragment","fragment------onStop");
+        Log.i("BaseFragment", "fragment------onStop");
     }
 
     @Override
     public void onDestroy() {
-        if(mBasePresenter!=null&&this instanceof IBaseView){
-            mBasePresenter.detachView();;
-            mBasePresenter=null;
+        Log.i("BaseFragment", "fragment------onDestroy");
+        if (mBasePresenter != null && this instanceof IBaseView) {
+//            mBasePresenter.detachView();
+//            mBasePresenter=null;
         }
-        mContext=null;
+//        mContext=null;
         super.onDestroy();
+    }
+
+    @Override
+    public void onDetach() {
+        Log.i("BaseFragment", "fragment------onDetach");
+        super.onDetach();
     }
 
     //重写IBase中的方法
     @Override
     public View createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view=inflater.inflate(getContentLayout(),container,false);
+        View view = inflater.inflate(getContentLayout(), container, false);
         return view;
     }
 

@@ -53,7 +53,7 @@ public class MoviePlayActivity extends BaseActivity {
     @Override
     public void getIntentValue() {
         super.getIntentValue();
-        videoPath = getIntent().getStringExtra("VIEEO_PATH");
+        videoPath = getIntent().getStringExtra("VIDEO_PATH");
         videoTitle=getIntent().getStringExtra("VIDEO_TITLE");
     }
 
