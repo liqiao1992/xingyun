@@ -25,4 +25,6 @@
     <color name="gray_darker">#2b2b2b</color>
     <color name="gray_alpha_light">#90999999</color>
     <color name="white">#fafafa</color>
+
+    <color name="black_overlay">#66000000</color>
 </resources>

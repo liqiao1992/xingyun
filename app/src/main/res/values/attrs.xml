@@ -8,4 +8,5 @@
     <attr name="selectorBtn" format="reference"></attr>
     <attr name="selectorListItem" format="reference"></attr>
     <attr name="toolbarBackground" format="reference|color"></attr>
+
 </resources>

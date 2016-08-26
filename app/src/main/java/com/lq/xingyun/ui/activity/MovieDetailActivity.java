@@ -161,7 +161,7 @@ public class MovieDetailActivity extends BaseActivity implements IMovieActivityV
         if(snackbar!=null&&snackbar.isShown()){
             snackbar.dismiss();
         }
-        Intent intent = new Intent(MovieDetailActivity.this, MoviePlayActivity.class);
+        Intent intent = new Intent(MovieDetailActivity.this, FullScreenMoviePlayActivity.class);
         intent.putExtra("VIDEO_PATH", data.getUrl());
         intent.putExtra("VIDEO_TITLE",movieTitle+"第"+episodesId+"集");
         startActivity(intent);
