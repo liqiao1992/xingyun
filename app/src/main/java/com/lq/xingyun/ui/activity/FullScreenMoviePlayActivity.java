@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.lq.xingyun.R;
 import com.lq.xingyun.presenter.BasePresenter;
+import com.lq.xingyun.utils.LogUtil;
 import com.lq.xingyun.widget.MediaController;
 import com.pili.pldroid.player.AVOptions;
 import com.pili.pldroid.player.PLMediaPlayer;
@@ -127,7 +128,7 @@ public class FullScreenMoviePlayActivity extends BaseActivity {
     public boolean dispatchTouchEvent(MotionEvent ev) {
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                Log.i("fuck", "activity页面点击了");
+                LogUtil.i("fuck", "activity页面点击了");
                 mHideHandler.removeCallbacks(hideRunnable);
                 showStatusBarAndToolBar();
                 break;
