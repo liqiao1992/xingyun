@@ -2,6 +2,7 @@ package com.lq.xingyun.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -59,9 +60,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         mViewPager = (ViewPager) findViewById(R.id.viewPager);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         List<String> titles = new ArrayList<>();
-        titles.add("电影");
-        titles.add("美文");
-        titles.add("妹子");
+        titles.add(getResources().getString(R.string.tab_movie));
+        titles.add(getResources().getString(R.string.tab_article));
+        titles.add(getResources().getString(R.string.tab_picture));
 
         tabLayout.addTab(tabLayout.newTab().setText(titles.get(0)));
         tabLayout.addTab(tabLayout.newTab().setText(titles.get(1)));
@@ -104,6 +105,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public void setActionBar() {
         super.setActionBar();
+        getSupportActionBar().setTitle(R.string.app_name);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -114,15 +116,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Snackbar.make(v, "fuckyou", Snackbar.LENGTH_LONG).show();
+                boolean s= PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("night_mode",false);
+                Snackbar.make(v, s+"", Snackbar.LENGTH_LONG).show();
 
             }
         });
-        if (SharedPreferencesUtils.getBoolean(getApplicationContext(), "isNight")) {
-            navigationView.getMenu().findItem(R.id.day).setIcon(R.mipmap.ic_day).setTitle("日间模式");
-        } else {
-            navigationView.getMenu().findItem(R.id.day).setIcon(R.mipmap.ic_night).setTitle("夜间模式");
-        }
+//        if (SharedPreferencesUtils.getBoolean(getApplicationContext(), "isNight")) {
+//            navigationView.getMenu().findItem(R.id.day).setIcon(R.mipmap.ic_day).setTitle("日间模式");
+//        } else {
+//            navigationView.getMenu().findItem(R.id.day).setIcon(R.mipmap.ic_night).setTitle("夜间模式");
+//        }
 
     }
 
@@ -150,13 +153,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.day:
-                if (SharedPreferencesUtils.getBoolean(getApplicationContext(), "isNight")) {
-                    ChangeToDay();
-                }else{
-                    ChangeToNight();
-                }
-                MainActivity.this.recreate();
+            case R.id.setting:
+                Intent intent=new Intent();
+                intent.setClass(getApplicationContext(),SettingActivity.class);
+                startActivity(intent);
                 break;
         }
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
